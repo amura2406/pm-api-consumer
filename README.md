@@ -16,5 +16,5 @@ To start this app please make sure **Scala 2.11.x** & **SBT 0.13.x** already ins
 Go into root of this project and type on terminal
 
 ``` bash
-sbt run
+sbt update run
 ```
