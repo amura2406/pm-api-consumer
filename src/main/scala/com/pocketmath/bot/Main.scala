@@ -3,7 +3,8 @@ package com.pocketmath.bot
 import com.google.inject.Guice
 import com.pocketmath.bot.module.{APIModule, TypesafeConfigModule}
 import com.pocketmath.bot.service.{TraderService, TransactionService}
-import com.twitter.util.Await
+import com.twitter.util.{Await, JavaTimer}
+import com.twitter.conversions.time._
 
 /**
   * Created by amura on 12/25/16.
@@ -18,6 +19,9 @@ object Main extends App{
   )
 
   import net.codingwell.scalaguice.InjectorExtensions._
+
+  // Declared implicit timer to support delayed invocation below
+  implicit val timer = new JavaTimer
 
   // Create the services instance
   val traderSvc = injector.instance[TraderService]
@@ -43,7 +47,7 @@ object Main extends App{
 
   // Create request to get average transactions value from Beijing traders in async
   val fut4 = for{
-    traders <- traderSvc.getAllTraders(country = Some("Beijing"))
+    traders <- traderSvc.getAllTraders(country = Some("Beijing")) delayed(5 seconds) // Delayed invocation is used just to prevent rate limiter
     // Process this block only if data is fetched & parsed successfully
     // Create an array of only the traderId
     tradersSet = traders map (_.id)
