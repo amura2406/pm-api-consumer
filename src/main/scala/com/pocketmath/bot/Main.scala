@@ -63,6 +63,7 @@ object Main extends App{
   Await.result(fut2)
   Await.result(fut3)
   Await.result(fut4)
+  timer.stop()
 
   println("Program finished !")
 }
